@@ -100,7 +100,7 @@ export const generatePDF = async ({
 
   // Funções auxiliares
   const centerText = (text: string, y: number) => {
-    const textWidth = pdf.getStringUnitWidth(text) * pdf.getFontSize() / pdf.internal.scaleFactor;
+    const textWidth = pdf.getStringUnitWidth(text) * pdf.internal.getFontSize() / pdf.internal.scaleFactor;
     const x = (pageWidth - textWidth) / 2;
     pdf.text(text, x, y);
   };
