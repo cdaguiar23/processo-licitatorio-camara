@@ -207,13 +207,19 @@ function FormalDemand() {
   };
 
   return (
-    <Box sx={{ maxWidth: 800, margin: '0 auto', p: 3 }}>
+    <Box sx={{ 
+      width: '100%', 
+      maxWidth: '100%',
+      margin: '0 auto', 
+      p: { xs: 1, sm: 2, md: 3 } // Padding responsivo
+    }}>
       <Paper 
         elevation={0} 
         sx={{ 
-          p: 3, 
+          p: { xs: 1, sm: 2, md: 3 }, // Padding responsivo
           border: '1px solid rgba(0, 0, 0, 0.23)',
-          borderRadius: 2
+          borderRadius: 2,
+          overflowX: 'auto' // Permite scroll horizontal quando necessário
         }}
       >
         <Typography variant="h6" align="center" gutterBottom>
@@ -259,7 +265,7 @@ function FormalDemand() {
               <TextField
                 fullWidth
                 size="small"
-                defaultValue="Câmara de Vereadores de Canelinha"
+                defaultValue=""
                 label="Órgão"
               />
             </Grid>
@@ -337,8 +343,8 @@ function FormalDemand() {
 
             <Grid item xs={12}>
               <Typography variant="body1" gutterBottom>3. Descrições e quantidades</Typography>
-              <TableContainer>
-                <Table size="small">
+              <TableContainer sx={{ overflowX: 'auto' }}>
+                <Table size="small" sx={{ minWidth: 650 }}>
                   <TableHead>
                     <TableRow>
                       <TableCell width="40%">Descrição</TableCell>
@@ -514,7 +520,7 @@ function FormalDemand() {
               <Typography variant="body1" gutterBottom>9. Recursos orçamentários</Typography>
               <Typography variant="body2" paragraph>
                 9.1 Os recursos necessários para a contratação do empresa serão previstos no orçamento do ano vigente, na dotação
-                orçamentária específica da Câmara de Vereadores de Canelinha-SC, na seguinte rubrica:
+                orçamentária específica da Câmara de Vereadores de CidadeTal-SC, na seguinte rubrica:
               </Typography>
               
               <Grid container spacing={2}>
@@ -639,20 +645,33 @@ function FormalDemand() {
               />
             </Grid>
 
-            <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 2 }}>
-              <Button 
-                variant="outlined" 
-                onClick={handleClear}
-              >
-                Limpar
-              </Button>
-              <Button 
-                variant="contained" 
-                color="primary" 
-                onClick={handleSave}
-              >
-                Salvar e Gerar PDF
-              </Button>
+            <Grid container spacing={{ xs: 1, sm: 2 }}>
+              <Grid item xs={12} sm={6}>
+                <Box sx={{ 
+                  display: 'flex', 
+                  flexDirection: { xs: 'column', sm: 'row' }, 
+                  justifyContent: 'flex-end', 
+                  gap: 1,
+                  mt: 2 
+                }}>
+                  <Button 
+                    fullWidth={false}
+                    sx={{ width: { xs: '100%', sm: 'auto' } }}
+                    variant="outlined" 
+                    onClick={handleClear}
+                  >
+                    Limpar
+                  </Button>
+                  <Button 
+                    fullWidth={false}
+                    sx={{ width: { xs: '100%', sm: 'auto' } }}
+                    variant="contained" 
+                    onClick={handleSave}
+                  >
+                    Salvar e Gerar PDF
+                  </Button>
+                </Box>
+              </Grid>
             </Grid>
           </Grid>
         </Box>
