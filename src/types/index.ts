@@ -11,3 +11,11 @@ export interface FormData {
   justification: string;
   department: string;
 }
+
+export interface Item {
+  description: string;
+  quantity: number;
+  measure: string;
+  monthlyValue: number;
+  totalValue: number;
+}

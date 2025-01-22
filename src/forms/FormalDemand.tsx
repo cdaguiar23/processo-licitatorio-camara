@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import jsPDF from 'jspdf';
 import {
   Box,
   Button,
@@ -18,15 +19,8 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import jsPDF from 'jspdf';
-
-interface Item {
-  description: string;
-  quantity: number;
-  measure: string;
-  monthlyValue: number;
-  totalValue: number;
-}
+import { generatePDF } from '../utils/pdfGenerator';
+import { Item } from '../types';
 
 function FormalDemand() {
   const [items, setItems] = useState<Item[]>([{
@@ -110,62 +104,67 @@ function FormalDemand() {
     return years;
   };
 
-  const generatePDF = async () => {
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4'
-    });
-
-    // Definir estilos de fonte
-    pdf.setFont('helvetica', 'normal');
-    
-    // Cabeçalho
-    pdf.setFontSize(12);
-    pdf.text('DOCUMENTO DE FORMALIZAÇÃO DE DEMANDA (DFD)', 105, 20, { align: 'center' });
-    
-    // Informações Básicas
-    pdf.setFontSize(10);
-    pdf.text(`Ano: ${currentYear}`, 20, 30);
-    pdf.text(`Unidade Demandante: ${unidadeDemandante}`, 20, 37);
-    pdf.text(`Responsável: ${responsavel}`, 20, 44);
-
-    // Dados dos Itens
-    pdf.setFontSize(10);
-    pdf.text('RELAÇÃO DE ITENS', 105, 60, { align: 'center' });
-    
-    // Cabeçalho da Tabela
-    const headers = ['Descrição', 'Quantidade', 'Unidade', 'Valor Mensal', 'Valor Total'];
-    const startY = 70;
-    const lineHeight = 7;
-    
-    // Desenhar tabela de itens
-    pdf.setDrawColor(0);
-    pdf.setLineWidth(0.5);
-    
-    items.forEach((item, index) => {
-      const y = startY + (index * lineHeight);
-      pdf.text(item.description, 20, y);
-      pdf.text(item.quantity.toString(), 80, y);
-      pdf.text(item.measure, 110, y);
-      pdf.text(`R$ ${item.monthlyValue.toFixed(2)}`, 140, y);
-      pdf.text(`R$ ${item.totalValue.toFixed(2)}`, 170, y);
-      pdf.line(20, y + 2, 190, y + 2);
-    });
-
-    // Análise de Riscos
-    pdf.text(`Necessita Análise de Riscos: ${needsRiskAnalysis === 'yes' ? 'Sim' : 'Não'}`, 20, startY + (items.length * lineHeight) + 20);
-
-    // Rodapé
-    pdf.text('Documento gerado automaticamente', 105, 280, { align: 'center' });
-
-    // Salvar PDF
-    pdf.save(`DFD_${currentYear}_${new Date().getTime()}.pdf`);
-  };
+  // Definindo todas as refs necessárias
+  const matriculaRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const objetoRef = useRef<HTMLInputElement>(null);
+  const justificativaRef = useRef<HTMLInputElement>(null);
+  const prioridadeRef = useRef<HTMLInputElement>(null);
+  const previsaoPCARef = useRef<HTMLInputElement>(null);
+  const estimativaValorRef = useRef<HTMLInputElement>(null);
+  const prazoEntregaRef = useRef<HTMLInputElement>(null);
+  const orgaoNumeroRef = useRef<HTMLInputElement>(null);
+  const orgaoNomeRef = useRef<HTMLInputElement>(null);
+  const unidadeNumeroRef = useRef<HTMLInputElement>(null);
+  const unidadeNomeRef = useRef<HTMLInputElement>(null);
+  const naturezaCodigoRef = useRef<HTMLInputElement>(null);
+  const naturezaDescricaoRef = useRef<HTMLInputElement>(null);
+  const fonteCodigoRef = useRef<HTMLInputElement>(null);
+  const fonteDescricaoRef = useRef<HTMLInputElement>(null);
+  const ruaRef = useRef<HTMLInputElement>(null);
+  const numeroRef = useRef<HTMLInputElement>(null);
+  const bairroRef = useRef<HTMLInputElement>(null);
+  const cidadeRef = useRef<HTMLInputElement>(null);
+  const estadoRef = useRef<HTMLInputElement>(null);
+  const vinculadoDFDRef = useRef<HTMLInputElement>(null);
+  const fiscalContratoRef = useRef<HTMLInputElement>(null);
+  const presidenteLegislativoRef = useRef<HTMLInputElement>(null);
 
   const handleSave = () => {
-    // Lógica de salvamento existente
-    generatePDF();
+    generatePDF({
+      currentYear,
+      unidadeDemandante,
+      responsavel,
+      items,
+      needsRiskAnalysis,
+      dfdNumber,
+      selectedYear,
+      telefone,
+      matricula: matriculaRef.current?.value || '',
+      email: emailRef.current?.value || '',
+      objeto: objetoRef.current?.value || '',
+      justificativa: justificativaRef.current?.value || '',
+      prioridade: prioridadeRef.current?.value || 'Alto',
+      previsaoPCA: previsaoPCARef.current?.value || 'no',
+      estimativaValor: estimativaValorRef.current?.value || '',
+      prazoEntrega: prazoEntregaRef.current?.value || '',
+      orgaoNumero: orgaoNumeroRef.current?.value || '',
+      orgaoNome: orgaoNomeRef.current?.value || '',
+      unidadeNumero: unidadeNumeroRef.current?.value || '',
+      unidadeNome: unidadeNomeRef.current?.value || '',
+      naturezaCodigo: naturezaCodigoRef.current?.value || '',
+      naturezaDescricao: naturezaDescricaoRef.current?.value || '',
+      fonteCodigo: fonteCodigoRef.current?.value || '',
+      fonteDescricao: fonteDescricaoRef.current?.value || '',
+      rua: ruaRef.current?.value || '',
+      numero: numeroRef.current?.value || '',
+      bairro: bairroRef.current?.value || '',
+      cidade: cidadeRef.current?.value || '',
+      estado: estadoRef.current?.value || '',
+      vinculadoDFD: vinculadoDFDRef.current?.value || '',
+      fiscalContrato: fiscalContratoRef.current?.value || '',
+      presidenteLegislativo: presidenteLegislativoRef.current?.value || ''
+    });
   };
 
   const handleClear = () => {
@@ -290,6 +289,7 @@ function FormalDemand() {
                 fullWidth
                 size="small"
                 label="Matrícula"
+                inputRef={matriculaRef}
               />
             </Grid>
             <Grid item xs={6}>
@@ -298,6 +298,7 @@ function FormalDemand() {
                 size="small"
                 label="E-mail"
                 type="email"
+                inputRef={emailRef}
               />
             </Grid>
 
@@ -321,6 +322,7 @@ function FormalDemand() {
                 fullWidth
                 multiline
                 rows={4}
+                inputRef={objetoRef}
               />
             </Grid>
 
@@ -330,6 +332,7 @@ function FormalDemand() {
                 fullWidth
                 multiline
                 rows={4}
+                inputRef={justificativaRef}
               />
             </Grid>
 
@@ -494,6 +497,7 @@ function FormalDemand() {
                 InputProps={{
                   startAdornment: <Typography>R$</Typography>
                 }}
+                inputRef={estimativaValorRef}
               />
             </Grid>
 
@@ -503,6 +507,7 @@ function FormalDemand() {
                 fullWidth
                 multiline
                 rows={2}
+                inputRef={prazoEntregaRef}
               />
             </Grid>
 
@@ -516,23 +521,63 @@ function FormalDemand() {
               <Grid container spacing={2}>
                 <Grid item xs={6}>
                   <Typography variant="body2">Órgão</Typography>
-                  <TextField size="small" placeholder="Número" fullWidth sx={{ mb: 1 }} />
-                  <TextField size="small" placeholder="Nome do órgão" fullWidth />
+                  <TextField 
+                    size="small" 
+                    placeholder="Número" 
+                    fullWidth 
+                    inputRef={orgaoNumeroRef}
+                  />
+                  <TextField 
+                    size="small" 
+                    placeholder="Nome do órgão" 
+                    fullWidth 
+                    inputRef={orgaoNomeRef}
+                  />
                 </Grid>
                 <Grid item xs={6}>
                   <Typography variant="body2">Unidade</Typography>
-                  <TextField size="small" placeholder="Número" fullWidth sx={{ mb: 1 }} />
-                  <TextField size="small" placeholder="Nome da unidade" fullWidth />
+                  <TextField 
+                    size="small" 
+                    placeholder="Número" 
+                    fullWidth 
+                    inputRef={unidadeNumeroRef}
+                  />
+                  <TextField 
+                    size="small" 
+                    placeholder="Nome da unidade" 
+                    fullWidth 
+                    inputRef={unidadeNomeRef}
+                  />
                 </Grid>
                 <Grid item xs={6}>
                   <Typography variant="body2">Natureza</Typography>
-                  <TextField size="small" placeholder="Código" fullWidth sx={{ mb: 1 }} />
-                  <TextField size="small" placeholder="Descrição da natureza" fullWidth />
+                  <TextField 
+                    size="small" 
+                    placeholder="Código" 
+                    fullWidth 
+                    inputRef={naturezaCodigoRef}
+                  />
+                  <TextField 
+                    size="small" 
+                    placeholder="Descrição da natureza" 
+                    fullWidth 
+                    inputRef={naturezaDescricaoRef}
+                  />
                 </Grid>
                 <Grid item xs={6}>
                   <Typography variant="body2">Fonte</Typography>
-                  <TextField size="small" placeholder="Código" fullWidth sx={{ mb: 1 }} />
-                  <TextField size="small" placeholder="Descrição da fonte" fullWidth />
+                  <TextField 
+                    size="small" 
+                    placeholder="Código" 
+                    fullWidth 
+                    inputRef={fonteCodigoRef}
+                  />
+                  <TextField 
+                    size="small" 
+                    placeholder="Descrição da fonte" 
+                    fullWidth 
+                    inputRef={fonteDescricaoRef}
+                  />
                 </Grid>
               </Grid>
             </Grid>
@@ -541,19 +586,19 @@ function FormalDemand() {
               <Typography variant="body1" gutterBottom>10. Local e horário da entrega/execução</Typography>
               <Grid container spacing={2}>
                 <Grid item xs={8}>
-                  <TextField fullWidth size="small" label="Rua" />
+                  <TextField fullWidth size="small" label="Rua" inputRef={ruaRef} />
                 </Grid>
                 <Grid item xs={4}>
-                  <TextField fullWidth size="small" label="Número" />
+                  <TextField fullWidth size="small" label="Número" inputRef={numeroRef} />
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField fullWidth size="small" label="Bairro" />
+                  <TextField fullWidth size="small" label="Bairro" inputRef={bairroRef} />
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField fullWidth size="small" label="Cidade" />
+                  <TextField fullWidth size="small" label="Cidade" inputRef={cidadeRef} />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField fullWidth size="small" label="Estado" />
+                  <TextField fullWidth size="small" label="Estado" inputRef={estadoRef} />
                 </Grid>
               </Grid>
             </Grid>
@@ -564,6 +609,7 @@ function FormalDemand() {
                 fullWidth
                 multiline
                 rows={2}
+                inputRef={vinculadoDFDRef}
               />
             </Grid>
 
@@ -573,6 +619,7 @@ function FormalDemand() {
                 fullWidth
                 multiline
                 rows={2}
+                inputRef={fiscalContratoRef}
               />
             </Grid>
 
@@ -589,6 +636,7 @@ function FormalDemand() {
                 fullWidth
                 size="small"
                 label="Presidente do Legislativo"
+                inputRef={presidenteLegislativoRef}
               />
             </Grid>
 
