@@ -111,7 +111,7 @@ export const generatePDF = async ({
 
   // Carrega a logo
   const loadImage = (): Promise<HTMLImageElement> => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       try {
         const img = new Image();
         img.crossOrigin = "anonymous";

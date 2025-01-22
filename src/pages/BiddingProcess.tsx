@@ -24,7 +24,7 @@ const steps = [
 
 function BiddingProcess() {
   const [activeStep, setActiveStep] = useState(0);
-  const { type } = useParams<{ type: BiddingType }>();
+  const { type: _type } = useParams<{ type: BiddingType }>();
 
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);

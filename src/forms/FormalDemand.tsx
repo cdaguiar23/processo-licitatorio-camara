@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react';
-import jsPDF from 'jspdf';
 import {
   Box,
   Button,
@@ -196,8 +195,8 @@ function FormalDemand() {
       // Remove formatação e converte para número
       const numeroLimpo = String(value).replace(/\D/g, '');
       item.monthlyValue = Number(numeroLimpo) / 100;
-    } else {
-      item[field] = value;
+    } else if (field === 'description' || field === 'measure') {
+      item[field] = value as string;
     }
 
     // Calcula o valor total
