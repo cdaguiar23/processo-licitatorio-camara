@@ -1,9 +1,26 @@
-# React + Vite
+# Sistema de Gestão de Licitações
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📋 Sobre o Projeto
 
-Currently, two official plugins are available:
+Sistema web desenvolvido para gerenciar processos de licitações, permitindo o controle e acompanhamento de demandas formais, termos de referência e outros documentos relacionados ao processo licitatório.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-# processo-licitatorio-camara
+## 🚀 Funcionalidades
+
+- Gestão completa do processo de licitação
+- Criação e edição de demandas formais
+- Gerenciamento de itens e especificações
+- Interface intuitiva com navegação por etapas
+- Validação de formulários
+- Responsividade para diferentes dispositivos
+
+## 🛠️ Tecnologias Utilizadas
+
+- **React** - Biblioteca JavaScript para construção de interfaces
+- **TypeScript** - Superset JavaScript com tipagem estática
+- **Material-UI** - Framework de componentes React
+- **Vite** - Build tool e bundler
+- **React Router** - Navegação entre componentes
+- **React Hook Form** - Gerenciamento de formulários
+
+## 📦 Instalação
+
